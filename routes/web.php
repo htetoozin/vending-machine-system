@@ -12,7 +12,10 @@ Route::get('/dashboard', function () {
 
 
 //auth route
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 //user route
-require __DIR__.'/user.php';
+require __DIR__ . '/user.php';
+
+//product route
+require __DIR__ . '/product.php';
