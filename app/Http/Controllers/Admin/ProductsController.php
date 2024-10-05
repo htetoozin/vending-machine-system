@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Services\PurchaseService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,6 @@ class ProductsController extends Controller
      */
     public function index(ProductFilter $filter)
     {
-        // return $request->all();
         $theads = config('table.products');
         $products = Product::filter($filter)->latest()->paginate(1);
 
@@ -36,6 +36,9 @@ class ProductsController extends Controller
      */
     public function create()
     {
+
+        Gate::authorize('viewAny', Product::class);
+
         return view('admin.products.create');
     }
 
@@ -44,6 +47,8 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request): RedirectResponse
     {
+        Gate::authorize('viewAny', Product::class);
+
         $data = $request->validated();
 
         Product::create($data);
@@ -65,6 +70,7 @@ class ProductsController extends Controller
      */
     public function edit(Product $product)
     {
+        Gate::authorize('viewAny', Product::class);
         return view('admin.products.edit', compact('product'));
     }
 
