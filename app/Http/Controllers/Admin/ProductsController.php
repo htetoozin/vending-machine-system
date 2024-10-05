@@ -136,4 +136,84 @@ class ProductsController extends Controller
 
         return back()->with('flash', "Save successfully!");
     }
+
+    public function test_purchase_with_insufficient_stock()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $product = Product::factory()->create([
+            'name' => 'Test Product',
+            'price' => 50.00,
+            'quantity_available' => 5,
+        ]);
+
+        $data = [
+            'product_id' => $product->id,
+            'qty' => 10, // payload qty
+        ];
+        $response = $this->post(route('admin.purchases.store'), $data);
+
+        $response->assertSessionHasErrors(['qty']);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'quantity_available' => 5,
+        ]);
+    }
+
+    public function test_purchase_with_invalid_data()
+    {
+        // Acting as a user
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $product = Product::factory()->create([
+            'name' => 'Test Product',
+            'price' => 50.00,
+            'quantity_available' => 100,
+        ]);
+
+        // Prepare invalid purchase data
+        $data = [
+            'product_id' => null,
+            'qty' => -10,
+        ];
+
+        $response = $this->post(route('admin.purchases.store'), $data);
+        $response->assertSessionHasErrors(['product_id', 'qty']);
+    }
+
+    public function test_successful_product_purchase()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $product = Product::factory()->create([
+            'name' => 'Test Product',
+            'price' => 50.00,
+            'quantity_available' => 100,
+        ]);
+        $data = [
+            'product_id' => $product->id,
+            'qty' => 10, // Quantity to purchase
+        ];
+
+        $response = $this->post(route('admin.purchases.store'), $data);
+
+        $response->assertRedirect()
+            ->assertSessionHas('flash', 'Save successfully!');
+
+        // Ensure the product's quantity is reduced by the purchased quantity
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'quantity_available' => 90, // 100 - 10
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'quantity' => 10,
+        ]);
+    }
 }
