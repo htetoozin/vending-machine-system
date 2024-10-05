@@ -76,7 +76,7 @@ class User extends Authenticatable
     {
         return match ($this->role_id) {
             UserRole::ADMIN->value => 'green',
-            UserRole::MANAGER->value => 'indigo',
+            UserRole::USER->value => 'indigo',
             default => null,
         };
     }
