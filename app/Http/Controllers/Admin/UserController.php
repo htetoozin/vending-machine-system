@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\StoreUserRequest;
+use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -24,15 +27,21 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = UserRole::cases();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        User::create($data);
+
+        return redirect()->route('admin.users.index')
+            ->with('flash', "{$data['name']} has been successfully created!");
     }
 
     /**
