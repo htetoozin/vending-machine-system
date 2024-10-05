@@ -3,15 +3,31 @@
 
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <form action="{{ route('admin.products.index') }}" method="GET">
+                <div class="flex mb-4">
+                    <div class="mr-6">
+                        <select id="order_by" name="order_by"
+                            class="w-40 bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block p-2.5">
+                            <option value="">Order By Name</option>
+                            <option value="asc">ASC</option>
+                            <option value="desc">DESC</option>
+                        </select>
+                    </div>
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Search</button>
+
+                </div>
+            </form>
             <div class="flex justify-end mb-4">
                 <a href="{{ route('admin.products.create') }}"
-                    class="inline-flex items-center text-white
+                    class="inline-flex items-center text-white 
                     bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4
                     focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5
                     py-2.5 text-center me-2 mb-2">
                     Create
                 </a>
             </div>
+
 
 
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -63,7 +79,13 @@
                     @endforeach
                 </x-table>
 
+
+
             </div>
+            <div class="mt-3">
+                {{ $products->links() }}
+            </div>
+
 
         </div>
     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\ProductFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Requests\Products\UpdateProductRequest;
@@ -17,13 +18,15 @@ class ProductsController extends Controller
 {
 
     public function __construct(private PurchaseService $purchaseService) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ProductFilter $filter)
     {
+        // return $request->all();
         $theads = config('table.products');
-        $products = Product::latest()->get();
+        $products = Product::filter($filter)->latest()->paginate(1);
 
         return view('admin.products.index', compact('theads', 'products'));
     }

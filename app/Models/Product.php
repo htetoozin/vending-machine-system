@@ -11,4 +11,13 @@ class Product extends Model
 
 
     protected $guarded = [];
+
+
+    /**
+     * Query scope.
+     */
+    public function scopeFilter($query, $filter)
+    {
+        $filter->apply($query);
+    }
 }
