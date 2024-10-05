@@ -75,8 +75,8 @@ class User extends Authenticatable
     public function statusLabel()
     {
         return match ($this->role_id) {
-            UserRole::ADMIN->value => 'success',
-            UserRole::MANAGER->value => 'danger',
+            UserRole::ADMIN->value => 'green',
+            UserRole::MANAGER->value => 'indigo',
             default => null,
         };
     }
