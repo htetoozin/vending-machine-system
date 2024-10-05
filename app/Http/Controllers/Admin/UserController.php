@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -55,17 +56,23 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $roles = UserRole::cases();
+        return view('admin.users.edit', compact('roles', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        $user->update($data);
+
+        return redirect()->route('admin.users.index')
+            ->with('flash', "{$data['name']} has been successfully updated!");
     }
 
     /**
