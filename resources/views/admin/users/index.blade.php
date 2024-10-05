@@ -33,18 +33,26 @@
                                 {{ $user->role }}
                             </th>
                             <td class="px-6 py-4">
+                                <div class="inline-flex space-x-2">
+                                    <!-- Edit Button -->
+                                    <a href="{{ route('admin.users.edit', $user) }}"
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-100 border border-transparent rounded-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
+                                        Edit
+                                    </a>
 
-                                <a href="{{ route('admin.users.edit', $user) }}"
-                                    class="inline-flex items-center px-4 py-2 mr-2 text-sm font-medium text-blue-600 bg-blue-100 border border-transparent rounded-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
-                                    Edit
-                                </a>
-
-
-                                <button
-                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-100 border border-transparent rounded-md hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-300">
-                                    Delete
-                                </button>
+                                    <!-- Delete Button -->
+                                    <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
+                                        onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-100 border border-transparent rounded-md hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-300">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
+
 
                         </tr>
                     @endforeach
