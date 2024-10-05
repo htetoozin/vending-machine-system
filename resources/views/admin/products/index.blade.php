@@ -34,6 +34,11 @@
                             </th>
                             <td class="px-6 py-4">
                                 <div class="inline-flex space-x-2">
+                                    <!-- Purchase Button -->
+                                    <a href="{{ route('admin.purchases.create', $product->id) }}"
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-green-500 border border-transparent rounded-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
+                                        Purchase
+                                    </a>
                                     <!-- Edit Button -->
                                     <a href="{{ route('admin.products.edit', $product) }}"
                                         class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-100 border border-transparent rounded-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">

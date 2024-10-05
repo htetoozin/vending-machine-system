@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
-use App\Enums\UserRole;
 
 class StoreProductRequest extends FormRequest
 {

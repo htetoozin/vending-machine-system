@@ -5,12 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Requests\Products\UpdateProductRequest;
+use App\Http\Requests\StorePurchaseRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Product;
+use App\Models\Transaction;
+use App\Services\PurchaseService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
+
+    public function __construct(private PurchaseService $purchaseService) {}
     /**
      * Display a listing of the resource.
      */
@@ -81,5 +87,44 @@ class ProductsController extends Controller
 
         return redirect()->route('admin.products.index')
             ->with('flash', "{$product->name} has been successfully deleted!");
+    }
+
+
+    /**
+     * Display the specified purchase resource.
+     */
+    public function createPurchase(Product $product)
+    {
+        $theads = config('table.transactions');
+
+        $transactions = Transaction::where('user_id', auth()->id())
+            ->where('product_id', $product->id)
+            ->latest()
+            ->get();
+
+        return view('admin.products.purchases.create', compact('theads', 'product', 'transactions'));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storePurchase(StorePurchaseRequest $request): RedirectResponse
+    {
+        $data = $request->validated();
+
+        $userId = auth()->id();
+
+        DB::transaction(function () use ($data, $userId) {
+
+            $product = Product::find($data['product_id']);
+
+            $this->purchaseService->create($userId, $data, $product->price);
+
+            $product->quantity_available -= $data['qty'];
+            $product->save();
+        });
+
+        return back()->with('flash', "Save successfully!");
     }
 }

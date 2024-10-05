@@ -11,6 +11,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+
+
 //auth route
 require __DIR__ . '/auth.php';
 
