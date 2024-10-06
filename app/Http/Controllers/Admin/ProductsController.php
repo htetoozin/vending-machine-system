@@ -26,7 +26,7 @@ class ProductsController extends Controller
     public function index(ProductFilter $filter)
     {
         $theads = config('table.products');
-        $products = Product::filter($filter)->latest()->paginate(1);
+        $products = Product::filter($filter)->latest()->paginate(10);
 
         return view('admin.products.index', compact('theads', 'products'));
     }
