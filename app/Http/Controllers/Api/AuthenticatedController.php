@@ -26,10 +26,21 @@ class AuthenticatedController extends Controller
         $user = new UserResource($user);
 
         $data = [
+            'message' => 'User login successfully.',
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+
         ];
 
         return response()->json($data);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logout successful.',
+        ]);
     }
 }
